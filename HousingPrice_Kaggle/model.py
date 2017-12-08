@@ -7,7 +7,8 @@ Created on Thu Dec  7 18:04:20 2017
 import random as rd
 import pandas as pd
 import math
-
+from sklearn import linear_model
+import numpy as np
 
 train_df = pd.read_csv('./train.csv')
 test_df = pd.read_csv('./test.csv')
@@ -27,8 +28,8 @@ print (test_df.shape)
 
 
 #Drop PoolQC, MiscFeature, Alley, Fence, FireplaceQu from test and train because many are NULL
-train_df = train_df.drop(['PoolQC','MiscFeature','Alley','Fence','FireplaceQu'],axis=1)
-test_df = test_df.drop(['PoolQC','MiscFeature','Alley','Fence','FireplaceQu'],axis=1)
+train_df = train_df.drop(['PoolQC','MiscFeature','Alley','Fence','FireplaceQu','Id'],axis=1)
+test_df = test_df.drop(['PoolQC','MiscFeature','Alley','Fence','FireplaceQu','Id'],axis=1)
 
 print ("After Dropping")
 print (train_df.shape)
@@ -69,5 +70,20 @@ test_df['GarageYrBlt'] = test_df['GarageYrBlt'].fillna('0')
 
 combine = [train_df,test_df]
 
+train_df = train_df.dropna()
+test_df = test_df.dropna()
 
+
+
+#Convert all string features to numeric
+
+X_train = train_df.drop('Salesprice',axis=1)
+Y_train = train_df['SalePrice']
+X_test = test_df
+regr = linear_model.LinearRegression()
+Y_train = Y_train.reshape(Y_train.shape[0], 1)
+print (Y_train.shape)
+regr.fit(X_train,Y_train)
+pred = regr.predict(X_test)
+print (pred)
 
