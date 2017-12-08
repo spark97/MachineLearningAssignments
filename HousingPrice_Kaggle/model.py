@@ -48,11 +48,26 @@ print(null_test[null_test>0])
 #Filling the missing values for LotFrontage
 mean = train_df['LotFrontage'].mean()
 std = train_df['LotFrontage'].std()
-expected = rd.randrange(math.ceil(mean),math.floor(mean+std),1)
+expected = rd.randrange(math.ceil(mean-std),math.floor(mean+std),1)
 train_df['LotFrontage'] = train_df['LotFrontage'].fillna(expected)
 test_df['LotFrontage'] = test_df['LotFrontage'].fillna(expected)
 combine = [train_df,test_df]
-"""
-print (train_df.info())
-print (test_df.info())
-"""
+
+
+#Filling missing values for Garage
+train_df['GarageFinish'] = train_df['GarageFinish'].fillna('NG')
+train_df['GarageType'] = train_df['GarageType'].fillna('NG')
+train_df['GarageCond'] = train_df['GarageCond'].fillna('NG')
+train_df['GarageQual'] = train_df['GarageQual'].fillna('NG')
+train_df['GarageYrBlt'] = train_df['GarageYrBlt'].fillna('0')
+
+test_df['GarageFinish'] = test_df['GarageFinish'].fillna('NG')
+test_df['GarageType'] = test_df['GarageType'].fillna('NG')
+test_df['GarageCond'] = test_df['GarageCond'].fillna('NG')
+test_df['GarageQual'] = test_df['GarageQual'].fillna('NG')
+test_df['GarageYrBlt'] = test_df['GarageYrBlt'].fillna('0')
+
+combine = [train_df,test_df]
+
+
+
