@@ -12,6 +12,23 @@ from sklearn.model_selection import train_test_split
 #Getting stopwords from nltk 
 stop_words = stopwords.words('english')
 
+def modify(text):
+    modified = ""
+    try:
+        tokens = text.split()
+        for word in tokens:
+            word = unicode(word)
+            if word in stop_words:
+                continue
+            else:
+                modified = modified + " " + word 
+        #print ("String is UTF8")
+        return modified
+    except UnicodeError:
+        #print ("string is not UTF-8") 
+        return ""
+    
+
 #Read data fromm CSV file
 data = pd.read_csv('spam.csv')
 
@@ -27,4 +44,16 @@ X = data.drop(["label","class"],axis=1)
 Y = data["class"]
 
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.3,random_state=42)
+
+#remove stopwords from train samples
+for index, row in X_train.iterrows():
+    row["text"] = modify(row["text"])
+    
+#remove stopwords from test samples
+for index, row in X_test.iterrows():
+    row["text"] = modify(row["text"])
+    
+
+
+
 
