@@ -12,7 +12,8 @@ from sklearn.model_selection import train_test_split
 #Getting stopwords from nltk 
 stop_words = stopwords.words('english')
 
-def modify(text):
+def modify(row):
+    text = row["text"]
     modified = ""
     try:
         tokens = text.split()
@@ -22,10 +23,8 @@ def modify(text):
                 continue
             else:
                 modified = modified + " " + word 
-        #print ("String is UTF8")
         return modified
-    except UnicodeError:
-        #print ("string is not UTF-8") 
+    except UnicodeError: 
         return ""
     
 
@@ -40,18 +39,19 @@ data = data.rename(columns={"v1":"label", "v2":"text"})
 data['class'] = data['label'].map({'ham':0,'spam':1})
 
 
-X = data.drop(["label","class"],axis=1)
+
+data['updated_text'] = data.apply(modify,axis = 1) 
+data = data.drop(["text"],axis=1)
+data = data.rename(columns={"updated_text":"text"})
+
+print data.head()
+
+
+X = data["text"]
 Y = data["class"]
 
 X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.3,random_state=42)
 
-#remove stopwords from train samples
-for index, row in X_train.iterrows():
-    row["text"] = modify(row["text"])
-    
-#remove stopwords from test samples
-for index, row in X_test.iterrows():
-    row["text"] = modify(row["text"])
     
 
 
