@@ -60,7 +60,7 @@ X_train = vectorizer.fit_transform(X_train)
 X_test = vectorizer.transform(X_test)
 
 #MultinomialNaive
-gnb = MultinomialNB()
+gnb = MultinomialNB(alpha=0)
 Y_pred = gnb.fit(X_train,Y_train).predict(X_test)
 print Y_pred
 
